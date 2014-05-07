@@ -12,34 +12,48 @@
         $body.html('');
 
         var index = streams.home.length - 1;
-        var checkInterval = 3000;
+        var checkInterval = 4000;
         var oldStream = $.extend(true, {},streams);
         var allTweets = 0;
+        var lastTweet = 0;
+        var newTweets = 0;
         
-        getStream();
+        displayTweets();
         setInterval(checkStream, checkInterval);
         
         function getNumTweets(){
           allTweets = streams.home.length - 1
-          console.log(allTweets);
-
+          console.log('All tweets: ' + allTweets);
+          console.log('Previous tweets: ' + lastTweet);
+          console.log('New tweets: ' + (allTweets - lastTweet));
+          console.log('************************');
+          newTweets = allTweets - lastTweet;
         }
         
-        function getStream(){
+        function displayTweets(){
           getNumTweets();
-          while(index >= 0){
+          lastTweet = index;
+          
+          for(var i = newTweets; i > 0; i--){
+            var tweet = streams.home[index];
+            var $tweet = $('<div></div>');
+            $tweet.text('@' + tweet.user + '(time: ' + tweet.created_at + '): ' + tweet.message);
+            $tweet.appendTo($body);
+            index--;
+          }
+          /*while(index > 0){
             var tweet = streams.home[index];
             var $tweet = $('<div></div>');
             $tweet.text('@' + tweet.user + ': ' + tweet.message);
             $tweet.appendTo($body);
             index -= 1;
-          }
+          }*/
         }
 
         function checkStream(){
           if(oldStream !== streams){
             index = streams.home.length - 1;
-            getStream();
+            displayTweets();
             oldStream = $.extend(true, {},streams);
           }
         }
