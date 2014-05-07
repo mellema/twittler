@@ -12,33 +12,37 @@
         $body.html('');
 
         var index = streams.home.length - 1;
-        function getStream(){
-          while(index >= 0){
-          var tweet = streams.home[index];
-          var $tweet = $('<div></div>');
-          $tweet.text('@' + tweet.user + ': ' + tweet.message);
-          $tweet.appendTo($body);
-          index -= 1;
-          }
-        }
-        getStream();
         var checkInterval = 3000;
         var oldStream = $.extend(true, {},streams);
+        var allTweets = 0;
+        
+        getStream();
+        setInterval(checkStream, checkInterval);
+        
+        function getNumTweets(){
+          allTweets = streams.home.length - 1
+          console.log(allTweets);
+
+        }
+        
+        function getStream(){
+          getNumTweets();
+          while(index >= 0){
+            var tweet = streams.home[index];
+            var $tweet = $('<div></div>');
+            $tweet.text('@' + tweet.user + ': ' + tweet.message);
+            $tweet.appendTo($body);
+            index -= 1;
+          }
+        }
+
         function checkStream(){
           if(oldStream !== streams){
             index = streams.home.length - 1;
-            while(index >= 0){
-              tweet = streams.home[index];
-              $tweet = $('<div></div>');
-              $tweet.text('@' + tweet.user + ': ' + tweet.message);
-              $tweet.appendTo($body);
-              index -= 1;
-              
-            }
+            getStream();
             oldStream = $.extend(true, {},streams);
           }
         }
-        setInterval(checkStream, checkInterval);
       });
 
     </script>
