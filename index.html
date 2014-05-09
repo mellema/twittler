@@ -58,13 +58,12 @@
           }
         });
         
-        $('.resume').click(function() {
+        /*$('.resume').click(function() {
           intervalID = setInterval(checkStream, checkInterval);
           $button.text("PAUSE");
-          //$button.addClass('.pause');
           $button.addClass('pause').removeClass('resume');
           
-        });
+        });*/
         
         var $button2 = $("<button class = 'butt clear'>CLEAR</button>");
         $button2.appendTo($body);
@@ -98,12 +97,23 @@
           
           for(var i = newTweets; i > 0; i--){
             var tweet = streams.home[index];
+            
             var $tweet = $("<div class = 'tweets'></div>");
-            $tweet.text('@' + tweet.user + '(time: ' + tweet.created_at + '): ');
+            $tweet.text('@');
             $tweet.appendTo($body);
+            
+            var $tweetA = $("<strong class = 'users'></strong>");
+            $tweetA.text(tweet.user);
+            $tweetA.appendTo($tweet);
+            
+            var $tweetB = $('<div style = ></div>');
+            $tweetB.text(' (time: ' + tweet.created_at + '): ');
+            $tweetB.appendTo($body);
+            
             var $tweet2 = $("<div class = 'tweets'></div>");
             $tweet2.text(tweet.message);
             $tweet2.appendTo($body);
+            
             var $tweet3 = $("<br class = 'tweets'>");
             $tweet3.appendTo($body);
             index--;
