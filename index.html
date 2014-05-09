@@ -6,25 +6,75 @@
     
     <style>
       .butt {
-        position: absolute;
+        position: fixed;
         top: 10px;
-        right: 500px;
-        width: 100px;
+        width: 150px;
         height: 40px;
         font-size: 25px;
+      }
+      .pause {
+        right: 500px;
+      }
+      .resume {
+        right: 500px;
+      }
+      .clear {
+        right: 325px;
+      }
+      .tweeters {
+        right: 150px;
+      }
+      .outer {
+        height: 100px;
+        overflow: auto;
+      }
+      .tweets {
+      
       }
     </style>
   </head>
   <body>
-
+    <div class = 'outer'>
     <script>
 
       $(document).ready(function(){
+
         var $body = $('body');
         $body.html('');
         
-        var $button = $("<button class = 'butt'>PAUSE</button>");
+        var $button = $("<button id = 'switch' class = 'butt pause'>PAUSE</button>");
         $button.appendTo($body);
+        
+        $('#switch').click(function() {
+          if($('#switch').hasClass('pause')){
+            clearInterval(intervalID);
+            $button.text("RESUME");
+            $button.addClass('resume').removeClass('pause');
+          }
+          else{
+            intervalID = setInterval(checkStream, checkInterval);
+            $button.text("PAUSE");
+            $button.addClass('pause').removeClass('resume');
+          }
+        });
+        
+        $('.resume').click(function() {
+          intervalID = setInterval(checkStream, checkInterval);
+          $button.text("PAUSE");
+          //$button.addClass('.pause');
+          $button.addClass('pause').removeClass('resume');
+          
+        });
+        
+        var $button2 = $("<button class = 'butt clear'>CLEAR</button>");
+        $button2.appendTo($body);
+        
+        $('.clear').click(function() {
+          $('.tweets').remove();
+        });
+        
+        var $button3 = $("<button class = 'butt tweeters'>TWEETERS</button>");
+        $button3.appendTo($body);
         
         var index = streams.home.length - 1;
         var checkInterval = 4000;
@@ -32,16 +82,13 @@
         var allTweets = 0;
         var lastTweet = 0;
         var newTweets = 0;
+        var intervalID;
         
         displayTweets();
-        setInterval(checkStream, checkInterval);
+        intervalID = setInterval(checkStream, checkInterval);
         
         function getNumTweets(){
-          allTweets = streams.home.length - 1
-          console.log('All tweets: ' + allTweets);
-          console.log('Previous tweets: ' + lastTweet);
-          console.log('New tweets: ' + (allTweets - lastTweet));
-          console.log('************************');
+          allTweets = streams.home.length - 1;
           newTweets = allTweets - lastTweet;
         }
         
@@ -51,14 +98,13 @@
           
           for(var i = newTweets; i > 0; i--){
             var tweet = streams.home[index];
-            var $tweet = $("<div></div>");
+            var $tweet = $("<div class = 'tweets'></div>");
             $tweet.text('@' + tweet.user + '(time: ' + tweet.created_at + '): ');
             $tweet.appendTo($body);
-            var $tweet2 = $('<div></div>');
+            var $tweet2 = $("<div class = 'tweets'></div>");
             $tweet2.text(tweet.message);
             $tweet2.appendTo($body);
-            var $tweet3 = $('<br>');
-            //$tweet2.text(tweet.message);
+            var $tweet3 = $("<br class = 'tweets'>");
             $tweet3.appendTo($body);
             index--;
           }
@@ -74,5 +120,6 @@
       });
 
     </script>
+    </div>
   </body>
 </html>
