@@ -3,14 +3,29 @@
   <head>
     <script src="jquery.js"></script>
     <script src="data_generator.js"></script>
+    
+    <style>
+      .butt {
+        position: absolute;
+        top: 10px;
+        right: 500px;
+        width: 100px;
+        height: 40px;
+        font-size: 25px;
+      }
+    </style>
   </head>
   <body>
+
     <script>
 
       $(document).ready(function(){
         var $body = $('body');
         $body.html('');
-
+        
+        var $button = $("<button class = 'butt'>PAUSE</button>");
+        $button.appendTo($body);
+        
         var index = streams.home.length - 1;
         var checkInterval = 4000;
         var oldStream = $.extend(true, {},streams);
@@ -36,18 +51,17 @@
           
           for(var i = newTweets; i > 0; i--){
             var tweet = streams.home[index];
-            var $tweet = $('<div></div>');
-            $tweet.text('@' + tweet.user + '(time: ' + tweet.created_at + '): ' + tweet.message);
+            var $tweet = $("<div></div>");
+            $tweet.text('@' + tweet.user + '(time: ' + tweet.created_at + '): ');
             $tweet.appendTo($body);
+            var $tweet2 = $('<div></div>');
+            $tweet2.text(tweet.message);
+            $tweet2.appendTo($body);
+            var $tweet3 = $('<br>');
+            //$tweet2.text(tweet.message);
+            $tweet3.appendTo($body);
             index--;
           }
-          /*while(index > 0){
-            var tweet = streams.home[index];
-            var $tweet = $('<div></div>');
-            $tweet.text('@' + tweet.user + ': ' + tweet.message);
-            $tweet.appendTo($body);
-            index -= 1;
-          }*/
         }
 
         function checkStream(){
