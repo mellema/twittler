@@ -12,6 +12,7 @@
         height: 40px;
         font-size: 25px;
         margin: 25px 10px 25px 15px;
+        cursor: pointer;
       }
       .pause {
         left: 20px;
@@ -32,7 +33,7 @@
 
       }
       .users {
-        cursor: pointer;
+        
       }
       .timeline {
         position: fixed;
@@ -42,16 +43,20 @@
         height: 400px;
         font-size: 16px;
         border: 1px solid black;
+        display: none;
       }
-      .tl {
-        position: fixed;
-        top: 25px;
-        right: 400px;
+
+      a {
+        color: black;
+        text-decoration: none;
+        cursor: pointer;
+        font-weight: bold;
       }
     </style>
   </head>
   <body>
     <div class = 'outer'>
+
     <script>
 
       $(document).ready(function(){
@@ -62,11 +67,8 @@
         var $button = $("<button id = 'switch' class = 'butt pause'>PAUSE</button>");
         $button.appendTo($body);
         
-        var $timelines = $("<div date-role = 'popup' class = 'timeline'></div>");
+        var $timelines = $("<div class = 'timeline'>TIMELINE:</div>");
         $timelines.appendTo($body);
-        
-        var $tl = $("<h2 class = 'tl'>TIMELINE:</h2>");
-        $tl.appendTo($body);
         
         $('#switch').click(function() {
           if($('#switch').hasClass('pause')){
@@ -88,9 +90,8 @@
           $('.tweets').remove();
           $('.times').remove();
         });
-        
+
         var $button3 = $("<button class = 'butt tweeters'>TWEETERS</button>");
-        //$button3.appendTo($body);
         
         var index = streams.home.length - 1;
         var checkInterval = 4000;
@@ -119,7 +120,7 @@
             $tweet.text('@');
             $tweet.appendTo($body);
             
-            var $tweetA = $("<strong class = 'users'></strong>");
+            var $tweetA = $("<a class = 'users'></a>");
             $tweetA.text(tweet.user);
             $tweetA.appendTo($tweet);
             
@@ -137,11 +138,21 @@
           }
         }
         
-        $('.users').mouseover(function() {
+        $('a').mouseover(function() {
+          $(this).css( "color", "red" );
+          $('.timeline').css("display", 'inline');
+        });
+        
+        $('a').mouseout(function() {
+          $(this).css( "color", "black" );
+          $('.timeline').css("display", 'none');
+        });
+                
+        $('.butt').mouseover(function() {
           $(this).css( "color", "red" );
         });
         
-        $('.users').mouseout(function() {
+        $('.butt').mouseout(function() {
           $(this).css( "color", "black" );
         });
         /*$('.users').click(function() {
