@@ -6,30 +6,47 @@
     
     <style>
       .butt {
-        position: fixed;
-        top: 10px;
+        position: static;
+        top: 30px;
         width: 150px;
         height: 40px;
         font-size: 25px;
+        margin: 25px 10px 25px 15px;
       }
       .pause {
-        right: 500px;
+        left: 20px;
       }
       .resume {
-        right: 500px;
+        right: 20px;
       }
       .clear {
-        right: 325px;
+        left: 25px;
       }
       .tweeters {
         right: 150px;
       }
       .outer {
-        height: 100px;
-        overflow: auto;
+
       }
       .tweets {
-      
+
+      }
+      .users {
+        cursor: pointer;
+      }
+      .timeline {
+        position: fixed;
+        top: 100px;
+        right: 250px;
+        width: 400px;
+        height: 400px;
+        font-size: 16px;
+        border: 1px solid black;
+      }
+      .tl {
+        position: fixed;
+        top: 25px;
+        right: 400px;
       }
     </style>
   </head>
@@ -45,6 +62,12 @@
         var $button = $("<button id = 'switch' class = 'butt pause'>PAUSE</button>");
         $button.appendTo($body);
         
+        var $timelines = $("<div date-role = 'popup' class = 'timeline'></div>");
+        $timelines.appendTo($body);
+        
+        var $tl = $("<h2 class = 'tl'>TIMELINE:</h2>");
+        $tl.appendTo($body);
+        
         $('#switch').click(function() {
           if($('#switch').hasClass('pause')){
             clearInterval(intervalID);
@@ -58,22 +81,16 @@
           }
         });
         
-        /*$('.resume').click(function() {
-          intervalID = setInterval(checkStream, checkInterval);
-          $button.text("PAUSE");
-          $button.addClass('pause').removeClass('resume');
-          
-        });*/
-        
         var $button2 = $("<button class = 'butt clear'>CLEAR</button>");
         $button2.appendTo($body);
         
         $('.clear').click(function() {
           $('.tweets').remove();
+          $('.times').remove();
         });
         
         var $button3 = $("<button class = 'butt tweeters'>TWEETERS</button>");
-        $button3.appendTo($body);
+        //$button3.appendTo($body);
         
         var index = streams.home.length - 1;
         var checkInterval = 4000;
@@ -106,7 +123,7 @@
             $tweetA.text(tweet.user);
             $tweetA.appendTo($tweet);
             
-            var $tweetB = $('<div style = ></div>');
+            var $tweetB = $("<div class = 'times' style = ></div>");
             $tweetB.text(' (time: ' + tweet.created_at + '): ');
             $tweetB.appendTo($body);
             
@@ -119,6 +136,24 @@
             index--;
           }
         }
+        
+        $('.users').mouseover(function() {
+          $(this).css( "color", "red" );
+        });
+        
+        $('.users').mouseout(function() {
+          $(this).css( "color", "black" );
+        });
+        /*$('.users').click(function() {
+          console.log($(this)[0].innerText);
+          var x = $(streams.home[0].created_at);
+          console.log(x[0]);
+          //console.log($(oldStream.users.douglascalhoun[0].created_at[0]));//.users.douglascalhoun[0].created_at));
+          var y = $(streams.home
+          for(item in streams.home){
+            console.log(item);
+          }
+        });*/
 
         function checkStream(){
           if(oldStream !== streams){
