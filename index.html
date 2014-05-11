@@ -23,8 +23,13 @@
       .clear {
         left: 25px;
       }
-      .tweeters {
-        right: 150px;
+      .ti {
+        position: absolute;
+        top: 10px;
+        left: 550px;
+        width: 100px;
+        font-size: 35px;
+        text-decoration: underline;
       }
       .outer {
 
@@ -36,14 +41,15 @@
         
       }
       .timeline {
-        position: fixed;
+        position: absolute;
         top: 100px;
-        right: 250px;
-        width: 400px;
-        height: 400px;
+        right: 550px;
+        width: 100px;
         font-size: 16px;
-        border: 1px solid black;
-        display: none;
+        overflow: visible;
+        display: inline;
+        border-left-style: solid;
+        border-width: 1px;
       }
 
       a {
@@ -54,13 +60,23 @@
       }
       .disp {
         display: inline;
+        float: left;
+        width: 500px;
       }
       .noDisp {
         display: none;
+        float:left;
+        width: 500px;
+      }
+      .curs {
+        cursor: pointer;
+      }
+      .noCurs {
+        cursor: default;
       }
     </style>
   </head>
-  <body>
+  <body class = 'bod'>
     <div class = 'outer'>
 
     <script>
@@ -73,7 +89,10 @@
         var $button = $("<button id = 'switch' class = 'butt pause'>PAUSE</button>");
         $button.appendTo($body);
         
-        var $timelines = $("<div class = 'timeline'>TIMELINE:</div>");
+        var $title = $("<h2 class = 'ti'>TIMELINES</h2>");
+        $title.appendTo($body);
+        
+        var $timelines = $("<div class = 'timeline'></div>");
         $timelines.appendTo($body);
         
         $('#switch').click(function() {
@@ -149,19 +168,61 @@
           }
         }
         var u = "";
-        $('a').mouseover(function() {
-          $(this).css( "color", "red" );
-          $('.timeline').css("display", 'inline');
-          u = ($(this).get(0)).innerText;
-          $('p.' + u).removeClass('noDisp').addClass('disp');
+        var clicker = false;
+        
+        $(document.body).on("mouseover", "a", function(){
+          if(!clicker){
+            $(this).css( "color", "red" );
+            u = ($(this).get(0)).innerText;
+            $('p.' + u).removeClass('noDisp').addClass('disp');
+            //alert("Over");
+          }
         });
         
-        $('a').mouseout(function() {
-          $(this).css( "color", "black" );
-          $('.timeline').css("display", 'none');
-          u = ($(this).get(0)).innerText;
-          $('p.' + u).removeClass('disp').addClass('noDisp');
+        $(document.body).on("mouseout", "a", function(){
+          if(!clicker){
+            $(this).css( "color", "black" );
+            u = ($(this).get(0)).innerText;
+            $('p.' + u).removeClass('disp').addClass('noDisp');
+            //alert("Out");
+          }
         });
+        
+        $(document.body).on("click", ".users", function(e){
+          e.stopPropagation();
+          clicker = true;
+          $('a').css('cursor', 'default');
+          $('body').css('cursor', 'pointer');
+          //alert("Click Users");
+        });
+        
+        $(document.body).on("click", function(){
+          if(clicker){
+            clicker = false;
+            $('a').css('color', 'black');
+            $('a').css('cursor', 'pointer');
+            $('body').css('cursor', 'default');
+            $('p.' + u).removeClass('disp').addClass('noDisp');
+            //alert("Click Body");
+          }
+        });
+
+
+       /* $('a').mouseover(function() {
+          if(!clicker){
+            $(this).css( "color", "red" );
+            u = ($(this).get(0)).innerText;
+            $('p.' + u).removeClass('noDisp').addClass('disp');
+          }
+        });*/
+        
+        /*$('a').mouseout(function() {
+          if(!clicker){
+            $(this).css( "color", "black" );
+            u = ($(this).get(0)).innerText;
+            $('p.' + u).removeClass('disp').addClass('noDisp');
+          }
+        });*/
                 
         $('.butt').mouseover(function() {
           $(this).css( "color", "red" );
@@ -170,30 +231,23 @@
         $('.butt').mouseout(function() {
           $(this).css( "color", "black" );
         });
-        $('.users').click(function() {
-          //console.log($(this)[0].innerText);
-          
-          /*var x = $(streams.home[0].created_at);
-          var y = $(this)[0].innerText;
-          //console.log(x[0]);
-          $t = $('<p></p>');
-          //console.log($(oldStream.users.douglascalhoun[0].created_at[0]));//.users.douglascalhoun[0].created_at));
-          //var y = $(streams.home
-          
-          for(var i = streams.home.length; i > 0; i--){
-            if(y == streams.home[i].users){
-              $t.text(streams.home[i].created_at);
-              $t.appendTo($timelines);
-            }
-          }/*
-          $.each(streams.home, function(index, val){
-            if(y == streams.home[index].user){
-              $t.text(streams.home[index].created_at);
-              $t.appendTo($timelines);
-              //console.log(streams.home[num].created_at);
-            }
-          });*/
+        
+        /*$('body').click(function(){
+          if(clicker){
+            clicker = false;
+            $('a').css('color', 'black');
+            $('a').css('cursor', 'pointer');
+            $('body').css('cursor', 'default');
+            $('p.' + u).removeClass('disp').addClass('noDisp');
+          }
         });
+        
+        $('.users').click(function(e) {
+          e.stopPropagation();
+          clicker = true;
+          $('a').css('cursor', 'default');
+          $('body').css('cursor', 'pointer');
+        });*/
 
         function checkStream(){
           if(oldStream !== streams){
