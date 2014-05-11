@@ -52,6 +52,12 @@
         cursor: pointer;
         font-weight: bold;
       }
+      .disp {
+        display: inline;
+      }
+      .noDisp {
+        display: none;
+      }
     </style>
   </head>
   <body>
@@ -100,6 +106,7 @@
         var lastTweet = 0;
         var newTweets = 0;
         var intervalID;
+        var arr = [];
         
         displayTweets();
         intervalID = setInterval(checkStream, checkInterval);
@@ -124,9 +131,13 @@
             $tweetA.text(tweet.user);
             $tweetA.appendTo($tweet);
             
-            var $tweetB = $("<div class = 'times' style = ></div>");
+            var $tweetB = $("<div class = 'times'></div>");
             $tweetB.text(' (time: ' + tweet.created_at + '): ');
             $tweetB.appendTo($body);
+            
+            var $tweetC = $("<p class = 'noDisp " + tweet.user + "'></p>");
+            $tweetC.text("--> " + tweet.message);
+            $tweetC.appendTo($timelines);
             
             var $tweet2 = $("<div class = 'tweets'></div>");
             $tweet2.text(tweet.message);
@@ -137,15 +148,19 @@
             index--;
           }
         }
-        
+        var u = "";
         $('a').mouseover(function() {
           $(this).css( "color", "red" );
           $('.timeline').css("display", 'inline');
+          u = ($(this).get(0)).innerText;
+          $('p.' + u).removeClass('noDisp').addClass('disp');
         });
         
         $('a').mouseout(function() {
           $(this).css( "color", "black" );
           $('.timeline').css("display", 'none');
+          u = ($(this).get(0)).innerText;
+          $('p.' + u).removeClass('disp').addClass('noDisp');
         });
                 
         $('.butt').mouseover(function() {
@@ -155,22 +170,37 @@
         $('.butt').mouseout(function() {
           $(this).css( "color", "black" );
         });
-        /*$('.users').click(function() {
-          console.log($(this)[0].innerText);
-          var x = $(streams.home[0].created_at);
-          console.log(x[0]);
+        $('.users').click(function() {
+          //console.log($(this)[0].innerText);
+          
+          /*var x = $(streams.home[0].created_at);
+          var y = $(this)[0].innerText;
+          //console.log(x[0]);
+          $t = $('<p></p>');
           //console.log($(oldStream.users.douglascalhoun[0].created_at[0]));//.users.douglascalhoun[0].created_at));
-          var y = $(streams.home
-          for(item in streams.home){
-            console.log(item);
-          }
-        });*/
+          //var y = $(streams.home
+          
+          for(var i = streams.home.length; i > 0; i--){
+            if(y == streams.home[i].users){
+              $t.text(streams.home[i].created_at);
+              $t.appendTo($timelines);
+            }
+          }/*
+          $.each(streams.home, function(index, val){
+            if(y == streams.home[index].user){
+              $t.text(streams.home[index].created_at);
+              $t.appendTo($timelines);
+              //console.log(streams.home[num].created_at);
+            }
+          });*/
+        });
 
         function checkStream(){
           if(oldStream !== streams){
             index = streams.home.length - 1;
             displayTweets();
             oldStream = $.extend(true, {},streams);
+            
           }
         }
       });
