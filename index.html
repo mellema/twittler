@@ -119,7 +119,7 @@
         var $button3 = $("<button class = 'butt tweeters'>TWEETERS</button>");
         
         var index = streams.home.length - 1;
-        var checkInterval = 4000;
+        var checkInterval = 5000;
         var oldStream = $.extend(true, {},streams);
         var allTweets = 0;
         var lastTweet = 0;
@@ -138,6 +138,7 @@
         function displayTweets(){
           getNumTweets();
           lastTweet = index;
+          var t2 = new Date();
           
           for(var i = newTweets; i > 0; i--){
             var tweet = streams.home[index];
@@ -151,8 +152,10 @@
             $tweetA.appendTo($tweet);
             
             var $tweetB = $("<div class = 'times'></div>");
-            $tweetB.text(' (time: ' + tweet.created_at + '): ');
+            
+            $tweetB.text(' Tweeted ' + ((t2 - tweet.created_at) / 1000) + 'seconds ago. ');
             $tweetB.appendTo($body);
+            //alert(t2 - tweet.created_at);
             
             var $tweetC = $("<p class = 'noDisp " + tweet.user + "'></p>");
             $tweetC.text("--> " + tweet.message);
