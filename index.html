@@ -1,8 +1,9 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <script src="jquery.js"></script>
+    <!--script src="jquery.js"></script-->
     <script src="data_generator.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
     
     <style>
       .butt {
@@ -32,7 +33,8 @@
         text-decoration: underline;
       }
       .outer {
-
+        height: 500px;
+        overflow: auto;
       }
       .tweets {
 
@@ -43,7 +45,7 @@
       .timeline {
         position: absolute;
         top: 100px;
-        right: 550px;
+        right: 650px;
         width: 100px;
         font-size: 16px;
         overflow: visible;
@@ -61,18 +63,21 @@
       .disp {
         display: inline;
         float: left;
-        width: 500px;
+        width: 700px;
       }
       .noDisp {
         display: none;
         float:left;
-        width: 500px;
+        width: 700px;
       }
       .curs {
         cursor: pointer;
       }
       .noCurs {
         cursor: default;
+      }
+      body {
+
       }
     </style>
   </head>
@@ -87,9 +92,10 @@
         $body.html('');
         
         var $button = $("<button id = 'switch' class = 'butt pause'>PAUSE</button>");
-        $button.appendTo($body);
+        $button.prependTo($body);
+
         
-        var $title = $("<h2 class = 'ti'>TIMELINES</h2>");
+        var $title = $("<h2 class = 'ti' title='timey-wimey'>TIMELINES</h2>");
         $title.appendTo($body);
         
         var $timelines = $("<div class = 'timeline'></div>");
@@ -109,7 +115,7 @@
         });
         
         var $button2 = $("<button class = 'butt clear'>CLEAR</button>");
-        $button2.appendTo($body);
+        $button2.prependTo($body);
         
         $('.clear').click(function() {
           $('.tweets').remove();
@@ -143,30 +149,39 @@
           for(var i = newTweets; i > 0; i--){
             var tweet = streams.home[index];
             
-            var $tweet = $("<div class = 'tweets'></div>");
-            $tweet.text('@');
-            $tweet.appendTo($body);
-            
-            var $tweetA = $("<a class = 'users'></a>");
-            $tweetA.text(tweet.user);
-            $tweetA.appendTo($tweet);
-            
-            var $tweetB = $("<div class = 'times'></div>");
-            
-            $tweetB.text(' Tweeted ' + ((t2 - tweet.created_at) / 1000) + 'seconds ago. ');
-            $tweetB.appendTo($body);
-            //alert(t2 - tweet.created_at);
-            
-            var $tweetC = $("<p class = 'noDisp " + tweet.user + "'></p>");
-            $tweetC.text("--> " + tweet.message);
-            $tweetC.appendTo($timelines);
+            var $tweet3 = $("<br class = 'tweets'>");
+            $tweet3.prependTo($body);
             
             var $tweet2 = $("<div class = 'tweets'></div>");
             $tweet2.text(tweet.message);
-            $tweet2.appendTo($body);
+            $tweet2.prependTo($body);
             
-            var $tweet3 = $("<br class = 'tweets'>");
-            $tweet3.appendTo($body);
+            var $tweetB = $("<div class = 'times'></div>");
+            $tweetB.text(' Tweeted: ' + tweet.created_at);
+            $tweetB.prependTo($body);
+            
+            var $tweet = $("<div class = 'tweets'></div>");
+            $tweet.prependTo($body);
+            
+            var $tweetA = $("<a class = 'users'></a>");
+            $tweetA.text(tweet.user);
+            $tweetA.prependTo($tweet);
+            
+            $button.prependTo($body);
+            $button2.prependTo($body);
+
+            var $tweetC = $("<p class = 'noDisp " + tweet.user + "'></p>");
+            
+            var elapsed = ((t2 - tweet.created_at) / 1000);
+            if(elapsed < 1){
+              $tweetC.text(tweet.user + " just tweeted --> " + tweet.message);
+            }
+            else{
+              $tweetC.text(tweet.user + " tweeted --> " + tweet.message + " " + Math.ceil(elapsed) + ' seconds ago. ');
+            }
+            
+            $tweetC.appendTo($timelines);
+
             index--;
           }
         }
@@ -178,7 +193,6 @@
             $(this).css( "color", "red" );
             u = ($(this).get(0)).innerText;
             $('p.' + u).removeClass('noDisp').addClass('disp');
-            //alert("Over");
           }
         });
         
@@ -187,7 +201,6 @@
             $(this).css( "color", "black" );
             u = ($(this).get(0)).innerText;
             $('p.' + u).removeClass('disp').addClass('noDisp');
-            //alert("Out");
           }
         });
         
@@ -196,7 +209,6 @@
           clicker = true;
           $('a').css('cursor', 'default');
           $('body').css('cursor', 'pointer');
-          //alert("Click Users");
         });
         
         $(document.body).on("click", function(){
@@ -206,27 +218,10 @@
             $('a').css('cursor', 'pointer');
             $('body').css('cursor', 'default');
             $('p.' + u).removeClass('disp').addClass('noDisp');
-            //alert("Click Body");
           }
         });
-
-
-       /* $('a').mouseover(function() {
-          if(!clicker){
-            $(this).css( "color", "red" );
-            u = ($(this).get(0)).innerText;
-            $('p.' + u).removeClass('noDisp').addClass('disp');
-          }
-        });*/
         
-        /*$('a').mouseout(function() {
-          if(!clicker){
-            $(this).css( "color", "black" );
-            u = ($(this).get(0)).innerText;
-            $('p.' + u).removeClass('disp').addClass('noDisp');
-          }
-        });*/
-                
+
         $('.butt').mouseover(function() {
           $(this).css( "color", "red" );
         });
@@ -234,23 +229,6 @@
         $('.butt').mouseout(function() {
           $(this).css( "color", "black" );
         });
-        
-        /*$('body').click(function(){
-          if(clicker){
-            clicker = false;
-            $('a').css('color', 'black');
-            $('a').css('cursor', 'pointer');
-            $('body').css('cursor', 'default');
-            $('p.' + u).removeClass('disp').addClass('noDisp');
-          }
-        });
-        
-        $('.users').click(function(e) {
-          e.stopPropagation();
-          clicker = true;
-          $('a').css('cursor', 'default');
-          $('body').css('cursor', 'pointer');
-        });*/
 
         function checkStream(){
           if(oldStream !== streams){
@@ -263,6 +241,6 @@
       });
 
     </script>
-    </div>
+    </div>     
   </body>
 </html>
